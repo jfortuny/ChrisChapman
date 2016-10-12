@@ -103,6 +103,7 @@ boxplot(store.df$p1sales~store.df$p1prom,
         main = "Weekly Sales of Product 1 with and without promotion")
 axis(side = 2, at = c(1,2), labels = c("No", "Yes"))
 
+<<<<<<< HEAD
 # 3.4.3 #######################################################################
 qqnorm(store.df$p1sales)
 qqline(store.df$p1sales)
@@ -143,3 +144,5 @@ mapCountryData(p1sales.map,
                colourPalette = brewer.pal(7, "Greens"),
                catMethod = "fixedWidth",
                addLegend = FALSE)
+=======
+>>>>>>> c8dcf56d4df42eac07fa5276641ffa19c063457d
