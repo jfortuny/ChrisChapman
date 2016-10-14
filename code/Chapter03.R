@@ -66,6 +66,13 @@ hist(store.df$p1sales,
      breaks = 30,
      col = "lightblue")
 
+library(ggplot2)
+ggplot(data = store.df, aes(p1sales)) +
+  geom_histogram(col = "black", fill = "lightblue") +
+  labs(title = "Product 1 weekly sales frequency, All Stores") +
+  xlab("Product 1 Sales (Units)") +
+  ylab("Count")
+
 hist(store.df$p1sales,
      main = "Product 1 weekly sales frequency, All Stores",
      xlab = "Product 1 Sales (Units)",
@@ -80,6 +87,20 @@ lines(density(store.df$p1sales),
       type = "l",
       col = "darkred",
       lwd = 2)
+
+ggplot(data = store.df, aes(p1sales)) +
+  geom_histogram(col = "black", fill = "lightblue") +
+  geom_freqpoly(col = "darkred",
+                lwd = 2) +
+  labs(title = "Product 1 weekly sales frequency, All Stores") +
+  xlab("Product 1 Sales (Units)") +
+  ylab("Count")
+ggplot(data = store.df, aes(p1sales)) +
+  geom_histogram(aes(y = ..density..), col = "black", fill = "lightblue") +
+  geom_density(col = "darkred") +
+  labs(title = "Product 1 weekly sales frequency, All Stores") +
+  xlab("Product 1 Sales (Units)") +
+  ylab("Count")
 
 # 3.4.2 #######################################################################
 boxplot(store.df$p1sales,
