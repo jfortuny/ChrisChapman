@@ -20,7 +20,7 @@ str(store.df)
 store.df$storeNum<-factor(store.df$storeNum)
 store.df$country<-factor(store.df$country)
 
-# 3.1.2
+# 3.1.2 #######################################################################
 set.seed(98250)
 store.df$p1prom<-rbinom(n=nrow(store.df), size=1, p=0.1)
 store.df$p2prom<-rbinom(n=nrow(store.df), size=1, p=0.15)
