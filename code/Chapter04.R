@@ -55,3 +55,82 @@ abline(v=mean(cust.df$age),
        col="dark blue",
        lty="dotted")
 
+plot(cust.df$store.spend, cust.df$online.spend,
+     main = "Customers as of June 2014",
+     xlab = "Prior 12 months in-store sales($)",
+     ylab = "Prior 12 months online sales($)",
+     cex = 0.7)
+hist(
+  cust.df$store.spend,
+  breaks = (0:ceiling(max(cust.df$store.spend) / 10)) * 10,
+  main = "Customers as of June 2014",
+  xlab = "Prior 12 months in-store sales($)",
+  ylab = "Count of Customers"
+)
+
+# 4.2.2 #######################################################################
+my.col<-c("black", "green3")
+my.pch<-c(1, 19)
+plot(cust.df$store.spend, cust.df$online.spend,
+     main = "Customers as of June 2014",
+     xlab = "Prior 12 months in-store sales($)",
+     ylab = "Prior 12 months online sales($)",
+     cex = 0.7,
+     col = my.col[cust.df$email],
+     pch = my.pch[cust.df$email])
+
+# 4.2.3 #######################################################################
+legend(x="topright",
+       legend = paste("email on file: ", levels(cust.df$email)),
+       col = my.col,
+       pch =  my.pch)
+
+# 4.2.4 #######################################################################
+plot(cust.df$store.spend + 1, cust.df$online.spend + 1,
+     log = "xy",
+     main = "Customers as of June 2014",
+     xlab = "Prior 12 months in-store sales($)",
+     ylab = "Prior 12 months online sales($)",
+     cex = 0.7,
+     col = my.col[cust.df$email],
+     pch = my.pch[cust.df$email])
+legend(x="topright",
+       legend = paste("email on file: ", levels(cust.df$email)),
+       col = my.col,
+       pch =  my.pch)
+
+# 4.3 #########################################################################
+par(mfrow=c(2,2))
+plot(cust.df$distance.to.store, cust.df$store.spend, main = "Store")
+plot(cust.df$distance.to.store, cust.df$online.spend, main = "Online")
+plot(cust.df$distance.to.store+1, cust.df$store.spend+1, log="xy", main = "Store (log)")
+plot(cust.df$distance.to.store+1, cust.df$online.spend+1, log="xy", main = "Online (log)")
+par(mfrow=c(1,1))
+
+# 4.4.1 #######################################################################
+pairs(
+  formula =  ~ age + credit.score + email + distance.to.store + online.visits +
+    online.trans + online.spend + store.trans + store.spend,
+  data = cust.df
+)
+pairs(cust.df[,2:10])
+
+# 4.4.2 #######################################################################
+library(car)
+scatterplotMatrix(
+  formula =  ~ age + credit.score + email + distance.to.store + online.visits +
+    online.trans + online.spend + store.trans + store.spend,
+  data = cust.df,
+  diagonal = "histogram"
+)
+
+library(gpairs)
+gpairs(cust.df[,2:10])
+
+# 4.5 #########################################################################
+cov(cust.df$age, cust.df$credit.score)
+cor(cust.df$age, cust.df$credit.score)
+# Cohen's rules of thumb for "people's variables" correlation (assuming normality of the variables:
+# r <= 0.1  weak
+# r = 0.3   medium
+# r >= 0.5  high
