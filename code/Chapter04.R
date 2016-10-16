@@ -148,6 +148,25 @@ corrplot.mixed(
   upper = "ellipse",
   tl.pos = "lt",
   col = colorpanel(50, "red", "gray60", "blue4")
-))
+)
 
+# 4.5.3 #######################################################################
+plot(cust.df$distance.to.store, cust.df$store.trans)
+plot(1/sqrt(cust.df$distance.to.store), cust.df$store.trans)
 
+# 4.5.5 #######################################################################
+library(car)
+powerTransform(cust.df$distance.to.store)
+
+lambda<-coef(powerTransform(1/cust.df$distance.to.store))
+bcPower(cust.df$distance.to.store,lambda)
+
+par(mfrow=c(1,2))
+hist(cust.df$distance.to.store,
+     xlab = "Distance to Nearest Store",
+     ylab = "Count of Customers",
+     main = "Original Distribution")
+hist(bcPower(cust.df$distance.to.store,lambda),
+     xlab = "Box-Cox transform of Distance to Nearest Store",
+     ylab = "Count of Customers",
+     main = "Transformed Distribution")
