@@ -1,6 +1,7 @@
 # 6.1 #########################################################################
 # use data from chapter 5
 load("U:\\My Documents\\R Projects\\ChrisChapman\\data\\Chapter05.RData")
+#load("C:\\Users\\Jose\\Documents\\Rwork\\ChrisChapman\\data\\Chapter05.RData")
 summary(seg.df)
 
 # 6.2 #########################################################################
