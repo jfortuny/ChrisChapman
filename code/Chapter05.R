@@ -48,3 +48,45 @@ seg.df$gender<-factor(seg.df$gender, labels=c("Female", "Male"))
 seg.df$subscribe<-factor(seg.df$subscribe, labels = c("subNo", "subYes"))
 summary(seg.df)
 summary(seg.df.orig)
+
+# 5.2 #########################################################################
+by(seg.df$income, seg.df$Segment, mean)
+by(seg.df$income, list(seg.df$Segment, seg.df$subscribe), mean)
+# use aggregate to return a data frame
+aggregate(seg.df$income, list(seg.df$Segment), mean)
+aggregate(seg.df$income, list(seg.df$Segment, seg.df$subscribe), mean)
+
+# 5.2.2 #######################################################################
+# use the formula syntax
+aggregate(income ~ Segment, data = seg.df, mean)
+aggregate(income ~ Segment + subscribe, data = seg.df, mean)
+# tabulate the results
+with(seg.df, table(Segment, subscribe))
+with(seg.df, table(Segment, ownHome))
+
+with(seg.df, table(kids, Segment))
+aggregate(kids~Segment, seg.df, sum)
+xtabs(kids ~ Segment, data = seg.df)
+
+# 5.2.3 #######################################################################
+library(lattice)
+library(ggplot2)
+histogram(~subscribe | Segment, data = seg.df)
+ggplot(seg.df, aes(subscribe)) +
+  geom_bar() +
+  facet_wrap(~Segment, nrow = 2)
+
+histogram(~subscribe | Segment, data = seg.df, type = "count",
+          layout = c(4,1), col = c("burlywood", "darkolivegreen"))
+ggplot(seg.df, aes(subscribe, fill = subscribe)) +
+  geom_bar() +
+  facet_wrap(~Segment, nrow = 1)
+
+histogram(~subscribe | Segment + ownHome, data = seg.df)
+ggplot(seg.df, aes(subscribe, fill = subscribe)) +
+  geom_bar(aes(y = (..count..) / sum(..count..))) +
+  facet_wrap(~ Segment + ownHome, nrow = 2)
+scale_y_continuous(labels = scales::percent)
+
+# save data for next time
+save(seg.df, file = "U:\\My Documents\\R Projects\\ChrisChapman\\data\\Chapter05.RData")
