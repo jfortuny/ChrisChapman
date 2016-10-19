@@ -36,3 +36,27 @@ anova(aov(income~Segment*ownHome, data = seg.df))
 # comparing models
 anova(aov(income~Segment, data = seg.df),
       aov(income~Segment+ownHome, data = seg.df))
+
+# 6.5.1 #######################################################################
+library(multcomp)
+seg.aov<-aov(income~Segment, data = seg.df)
+glht(seg.aov)
+
+# 6.5.2 #######################################################################
+seg.aov<-aov(income~-1+Segment, data = seg.df)
+glht(seg.aov)
+par(mar=c(6,10,2,2))
+plot(glht(seg.aov),
+     xlab="Income",
+     main="Average Income by Segment (95% CI)")
+
+# 6.5.3 #######################################################################
+seg.aov.step<-step(aov(income~., data = seg.df))
+anova(seg.aov.step)
+
+# 6.6.2 #######################################################################
+library(BayesFactor)
+set.seed(96761)
+seg.bf1<-lmBF(income~Segment, data = seg.df)
+seg.bf2<-lmBF(income~Segment+ownHome, data = seg.df)
+seg.bf1/seg.bf2
