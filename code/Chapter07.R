@@ -94,3 +94,89 @@ legend(
 )
 
 anova(m1, m2)
+
+# 7.3.2 #######################################################################
+# prediction with matrix multiplication (model: overall ~ rides + games + wait + clean)
+coef(m2) %*% c(1,100,100,100,100)   # 1 for intercept
+# prediction with the predict method
+nv<-data.frame(matrix(c(1,100,100,100,100), nrow=1))
+names(nv)<-c("overall", "rides", "games", "wait", "clean")
+predict(m2, nv)
+
+# 7.3.3 #######################################################################
+sat.std<-sat.df[,-3]
+sat.std[,3:8]<-scale(sat.std[,3:8])
+summary(sat.std)
+
+# 7.4 #########################################################################
+m3<-lm(overall ~ rides + games + wait + clean + weekend + logdist + num.child, data = sat.std)
+summary(m3)
+# num.child is converted to factor
+sat.std$num.child.factor<-factor(sat.std$num.child)
+m4 <-
+  lm(overall ~ rides + games + wait + clean + weekend + logdist + num.child.factor,
+     data = sat.std)
+summary(m4)
+# create a flag that indicates whether party has children asnd drop weekend
+sat.std$has.child<-factor(sat.std$num.child>0)
+m5 <-
+  lm(overall ~ rides + games + wait + clean + logdist + has.child,
+     data = sat.std)
+summary(m5)
+m5.2 <-
+  lm(overall ~ rides + games + wait + clean + logdist + has.child + num.child.factor,
+     data = sat.std)
+summary(m5.2)
+
+# 7.5 #########################################################################
+# Interaction Terms
+m6 <-
+  lm(
+    overall ~ rides + games + wait + clean +
+      weekend + logdist + has.child +
+      rides:has.child + games:has.child + wait:has.child + clean:has.child +
+      rides:weekend + games:weekend + wait:weekend + clean:weekend,
+    data = sat.std
+  )
+summary(m6)
+
+m7 <-
+  lm(overall ~ rides + games + wait + clean + logdist + has.child + wait:has.child,
+     data = sat.std)
+summary(m7)
+
+library(coefplot)
+coefplot(
+  m7,
+  intercept = FALSE,
+  outerCI = 1.96,
+  lwdOuter = 1.5,
+  ylab = "Rating of Feature",
+  xlab = "Association with Overall Satisfaction"
+)
+
+m6.step <- step(
+  lm(
+    overall ~ rides + games + wait + clean +
+      weekend + logdist + has.child +
+      rides:has.child + games:has.child + wait:has.child + clean:has.child +
+      rides:weekend + games:weekend + wait:weekend + clean:weekend,
+    data = sat.std
+  )
+)
+
+m7 <-
+  lm(
+    overall ~ rides + games + wait + clean + weekend + has.child +
+      wait:has.child + rides:weekend,
+    data = sat.std
+  )
+summary(m7)
+coefplot(
+  m7,
+  intercept = FALSE,
+  outerCI = 1.96,
+  lwdOuter = 1.5,
+  ylab = "Rating of Feature",
+  xlab = "Association with Overall Satisfaction"
+)
