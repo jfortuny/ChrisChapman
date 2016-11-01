@@ -53,3 +53,38 @@ spend.m5 <- lm(online.spend ~ email + age + credit.score + distance.to.store +
                data =  cust.df.bc)
 summary(spend.m5)
 vif(spend.m5)
+
+# 9.2.2 #######################################################################
+pass.df <- read.csv("http://goo.gl/J8MH6A")
+pass.df$Promo <- factor(pass.df$Promo, levels = c("NoBundle", "Bundle"))
+summary(pass.df)
+
+# 9.2.6 #######################################################################
+pass.m1 <- glm(Pass ~ Promo, data = pass.df, family = "binomial")
+summary(pass.m1)
+
+# odds ratio
+plogis(0.38879) / (1 - plogis(0.38879))
+exp(0.38879)
+# the odds ratio is 1.475 or
+# we're increasing the likelihood of purchase by 47.5%
+exp(coef(pass.m1))
+exp(confint(pass.m1))
+
+# 9.2.7 #######################################################################
+table(pass.df$Pass, pass.df$Channel)
+
+library(vcd)
+doubledecker(table(pass.df))
+
+pass.m2 <- glm(Pass ~ Promo + Channel, data = pass.df, family = "binomial")
+summary(pass.m2)
+exp(coef(pass.m2))
+exp(confint(pass.m2))
+
+pass.m3 <- glm(Pass ~ Promo + Channel + Promo:Channel,
+               data = pass.df, family = "binomial")
+summary(pass.m3)
+exp(coef(pass.m3))
+exp(confint(pass.m3))
+
