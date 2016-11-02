@@ -88,3 +88,18 @@ summary(pass.m3)
 exp(coef(pass.m3))
 exp(confint(pass.m3))
 
+# 9.3.2 #######################################################################
+conjoint.df <- read.csv("http://goo.gl/G8knGV")
+conjoint.df$speed <- factor(conjoint.df$speed)
+conjoint.df$height <- factor(conjoint.df$height)
+summary(conjoint.df)
+
+# 9.3.4 #######################################################################
+table(conjoint.df$rating)
+by(conjoint.df$rating, conjoint.df$height, mean)
+
+
+ride.lm <- lm(rating ~ speed + height + const + theme, data = conjoint.df)
+summary(ride.lm)
+
+# 9.3.5 #######################################################################
