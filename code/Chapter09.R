@@ -103,3 +103,24 @@ ride.lm <- lm(rating ~ speed + height + const + theme, data = conjoint.df)
 summary(ride.lm)
 
 # 9.3.5 #######################################################################
+library(lme4)
+ride.hlm1 <- lmer(rating ~ speed + height + const + theme + (1 | resp.id),
+                  data = conjoint.df)
+summary(ride.hlm1)
+
+fixef(ride.hlm1)
+head(ranef(ride.hlm1)$resp.id)
+head(coef(ride.hlm1)$resp.id)
+
+# 9.3.6 #######################################################################
+ride.hlm2 <- lmer(rating ~ speed + height + const + theme +
+                    (speed + height + const + theme | resp.id),
+                  data = conjoint.df,
+                  control = lmerControl(optCtrl = list(maxfun=100000)))
+summary(ride.hlm2)
+
+fixef(ride.hlm2)
+head(ranef(ride.hlm2)$resp.id)
+head(coef(ride.hlm2)$resp.id)
+# sanity check
+fixef(ride.hlm2) + ranef(ride.hlm2)$resp.id[196,]
