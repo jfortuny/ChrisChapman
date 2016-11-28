@@ -1,6 +1,7 @@
 # 11.2 ########################################################################
 #
 load("~/Rwork/ChrisChapman/data/Chapter05.RData")
+#load("U:/My Documents/R Projects/ChrisChapman/data/Chapter05.RData")
 seg.raw <- seg.df
 seg.df <- seg.raw[, -7]
 
@@ -62,3 +63,22 @@ boxplot(seg.df.num$income ~ seg.k$cluster, ylab="Income", xlab="Cluster")
 
 clusplot(seg.df, seg.k$cluster, color = TRUE, shade = TRUE,
          labels = 4, lines = 0, main = "K-means cluster plot")
+
+# 11.4.1 ######################################################################
+#
+set.seed(04625)
+train.prop <- 0.65
+train.cases <- sample(nrow(seg.raw), nrow(seg.raw) * train.prop)
+seg.df.train <- seg.raw[train.cases,]
+seg.df.test <- seg.raw[-train.cases,]
+
+library(e1071)
+(seg.nb <- naiveBayes(Segment ~ ., data = seg.df.train))
+
+(seg.nb.class <- predict(seg.nb, seg.df.test))
+prop.table(table(seg.nb.class))
+
+library(cluster)
+clusplot(seg.df.test[,-7], seg.nb.class,
+         color = TRUE, shade = TRUE, labels = 4, lines = 0,
+         main = "Nasive Bayes classification, holdout data")
